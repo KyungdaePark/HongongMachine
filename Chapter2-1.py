@@ -43,7 +43,7 @@ np.random.shuffle(index)
 
 # 랜덤하게 섞인 index 배열들의 원소를 이용해 input/target_arr의 원소를 무작위로 접근함
 train_input = input_arr[index[:35]]
-train_targt = target_arr[index[:35]]
+train_target = target_arr[index[:35]]
 test_input = input_arr[index[35:]]
 test_target = target_arr[index[35:]]
 print(train_input)
