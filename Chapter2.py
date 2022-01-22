@@ -42,18 +42,29 @@ index = np.arange(49) #0부터 48까지의 원소가 들어간 배열 index를 �
 np.random.shuffle(index)
 
 # 랜덤하게 섞인 index 배열들의 원소를 이용해 input/target_arr의 원소를 무작위로 접근함
-
+train_input = input_arr[index[:35]]
+train_targt = target_arr[index[:35]]
 test_input = input_arr[index[35:]]
 test_target = target_arr[index[35:]]
+print(train_input)
+print(input_arr[13], train_input[0])
 
 # 잘 섞였는지 확인을 위해 2차원 그래프로 그려볼 것
 import matplotlib.pyplot as plt
-plt.scatter(train_input[:,0], train_input[:,1])
-plt.scatter(test_input[:,0], test_input[:,1])
+plt.scatter(train_input[:, 0], train_input[:, 1])
+plt.scatter(test_input[:, 0], test_input[:, 1])
 plt.xlabel('length')
 plt.ylabel('weight')
 plt.show()
 
+
+# 섞은 데이터들을 학습시키고 잘 맞추는지 확인
+kn = kn.fit(train_input, train_target)
+score = kn.score(test_input, test_target)
+print(score)
+
+print(kn.predict(test_input))
+print(test_target)
 
 
 
