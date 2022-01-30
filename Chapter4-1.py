@@ -123,12 +123,12 @@ print(np.round(proba, decimals = 3))
 # 7개의 정보 : 각각의 원소마다 Z 값을 계산함
 # SoftMax 함수를 이용
 decisions2 = lr2.decision_function(test_scaled[:5])
-print("\n Decisions2 : ")
+print("\n Decisions2 (Z) of 7 Species : ")
 print(np.round(decisions2, decimals = 2))
 
 # z값 결과를 softmax에 의뢰
 from scipy.special import softmax
-print("\n PREDICT OF 5 decisions2")
+print("\n PREDICT OF 5 decisions2 using Softmax")
 proba2 = softmax(decisions2, axis = 1) # axis=1이면 각 샘플에 대한 소프트맥스를 계산함.
 print(np.round(proba2, decimals = 3))
       
