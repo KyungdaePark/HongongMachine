@@ -76,7 +76,7 @@ print("EACH MEAN SCORE : " + str(gs.cv_results_['mean_test_score']))
 
 # argmax()는 가장 큰 값의 인덱스 추출 가능
 best_index = np.argmax(gs.cv_results_['mean_test_score'])
-print("\n Params of Best Index (np.argmax)")
+print("\nParams of Best Index (np.argmax)")
 print(gs.cv_results_['params'][best_index]) # params는 매개변수 조합 有
 
 # 이제는 3개 이상의 조합으로 해보자.
