@@ -113,3 +113,4 @@ print("MAX : " + str(np.max(gs2.cv_results_['mean_test_score'])))
 dt2 = gs2.best_estimator_
 dt2.fit(train_input, train_target)
 print("\n\n최적의 모델로 훈련한 테스트 점수 : " + str(dt2.score(test_input, test_target)))
+
