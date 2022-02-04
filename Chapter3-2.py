@@ -24,8 +24,26 @@ train_input = train_input.reshape(-1,1)
 test_input = test_input.reshape(-1,1)
 
 from sklearn.neighbors import KNeighborsRegressor
+
 knr = KNeighborsRegressor(n_neighbors=3)
 knr.fit(train_input, train_target)
+
+import matplotlib.pyplot as plt
+
+plt.scatter(train_input, train_target)
+plt.xlabel('length')
+plt.ylabel('weight')
+plt.show()
+
+
+distances, indexes = knr.kneighbors([[50]])
+plt.scatter(train_input, train_target)
+plt.scatter(train_input[indexes], train_target[indexes], marker='D')
+
+plt.scatter(100,1033,marker='^')
+plt.xlabel('length')
+plt.ylabel('weight')
+plt.show()
 
 # 길이가 50인 농어의 무게 예측 : 
 print(knr.predict([[50]]))

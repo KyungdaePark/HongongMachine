@@ -14,6 +14,7 @@ smelt_weight = [6.7, 7.5, 7.0, 9.7, 9.8, 8.7, 10.0, 9.9, 9.8, 12.2, 13.4, 12.2, 
 # matplotlib를 이용해 그래프 그리기
 plt.scatter(bream_length, bream_weight)
 plt.scatter(smelt_length, smelt_weight)
+plt.scatter(30,600,marker='^')
 plt.xlabel('length')
 plt.ylabel('weight')
 plt.show()
