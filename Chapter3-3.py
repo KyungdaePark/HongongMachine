@@ -43,11 +43,14 @@ print("train score : " + str(lr.score(train_poly, train_target)))
 print("test score : " + str(lr.score(test_poly, test_target)))
 
 
-# 곱하는 계수를 증가시켜 더 정확한 모델을 구현할 수 있음 : degree
+# 곱하는 계수를 증가시켜 더 많은 특성을 가지고 있는 모델을 구현할 수 있음 : degree default : 2
 poly2 = PolynomialFeatures(degree = 5, include_bias = False)
 poly2.fit(train_input)
 train_poly2 = poly2.transform(train_input)
 test_poly2 = poly2.transform(test_input)
+
+# 어떤 조합으로 만들어졌는지 확인하기
+print(poly2.get_feature_names_out())
 
 lr.fit(train_poly2, train_target)
 print("\nPoly2 -> Linear score : ")
@@ -66,14 +69,14 @@ ss.fit(train_poly2)
 train_scaled = ss.transform(train_poly2)
 test_scaled = ss.transform(test_poly2)
 
-# 규제에는 두가지 방법 : 릿지(ridge)와 라쏘(lasso)
+# Regularizationed Linear에는 두가지 방법 : 릿지(ridge)와 라쏘(lasso)
 # ridge : 계수를 제곱한 값을 기준으로 규제를 정함
 # lasso : 게수의 절댓값을 기준으로 규제를 정함
 
 from sklearn.linear_model import Ridge
 ridge = Ridge()
 ridge.fit(train_scaled, train_target)
-print("\nPoly2 -> Ridge -> Linear score : ")
+print("\nPoly2 -> Ridge(Regularizationed Linear) score : ")
 print("train score : " + str(ridge.score(train_scaled, train_target)))
 print("test score : " + str(ridge.score(test_scaled, test_target)))
 
@@ -93,6 +96,7 @@ for alpha in alpha_list:
     
 plt.plot(np.log10(alpha_list),train_score)
 plt.plot(np.log10(alpha_list),test_score)
+plt.title('Score with Ridge alpha value')
 plt.xlabel('alpha')
 plt.ylabel('R^2')
 plt.show()
@@ -100,7 +104,7 @@ plt.show()
 # alpha = log10(x) = -1, x = 0.1이 최적임.
 ridge_final = Ridge(alpha = 0.1)
 ridge_final.fit(train_scaled, train_target)
-print("\nPoly2 -> Ridge -> Optimal Alpha Linear score : ")
+print("\nPoly2 -> Ridge -> Optimal Alpha(Regularizationed Linear) score : ")
 print("train score : " + str(ridge_final.score(train_scaled, train_target)))
 print("test score : " + str(ridge_final.score(test_scaled, test_target)))
 
@@ -108,7 +112,7 @@ print("test score : " + str(ridge_final.score(test_scaled, test_target)))
 from sklearn.linear_model import Lasso
 lasso = Lasso()
 lasso.fit(train_scaled, train_target)
-print("\nPoly2 -> Lasso -> Linear score : ")
+print("\nPoly2 -> Lasso(Regularizationed Linear) score : ")
 print("train score : " + str(lasso.score(train_scaled, train_target)))
 print("test score : " + str(lasso.score(test_scaled, test_target)))
 
@@ -116,13 +120,14 @@ train_score2 = []
 test_score2 = []
 alpha_list2 = [0.001, 0.01, 0.1, 1, 10, 100]
 for alpha2 in alpha_list2:
-    lasso2 = Lasso(alpha = alpha2)
+    lasso2 = Lasso(alpha = alpha2, max_iter = 100000) # 최적의 모델을 위해 반복 계산 수행
     lasso2.fit(train_scaled, train_target)
     train_score2.append(lasso2.score(train_scaled, train_target))
     test_score2.append(lasso2.score(test_scaled, test_target))
 
 plt.plot(np.log10(alpha_list2),train_score2)
 plt.plot(np.log10(alpha_list2),test_score2)
+plt.title('Score with Lasso alpha value')
 plt.xlabel('alpha')
 plt.ylabel('R^2')
 plt.show()
@@ -130,7 +135,7 @@ plt.show()
 # alpha = log10(x) = 1, x=10이 최적임
 lasso_final = Lasso(alpha = 10)
 lasso_final.fit(train_scaled, train_target)
-print("\nPoly2 -> Lasso -> Optimal Alpha Linear score : ")
+print("\nPoly2 -> Lasso -> Optimal Alpha(Regularizationed Linear) score : ")
 print("train score : " + str(lasso_final.score(train_scaled, train_target)))
 print("test score : " + str(lasso_final.score(test_scaled, test_target)))
 
