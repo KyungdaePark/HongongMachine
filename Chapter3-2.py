@@ -60,6 +60,7 @@ print(lr.predict([[50]]))
 # length = 15 ~ 50까지 그래프를 그리면
 import matplotlib.pyplot as plt
 plt.scatter(train_input, train_target)
+plt.scatter(50, 50 * lr.coef_+lr.intercept_, marker = '^')
 plt.plot([15,50], [15 * lr.coef_ + lr.intercept_, 50 * lr.coef_+lr.intercept_])
 plt.xlabel('length')
 plt.ylabel('weight')
@@ -67,6 +68,10 @@ plt.show()
 
 # 하지만 y절편이 음수이며 score을 확인해보면 과소적합이 일어남
 # 그래서 다항회귀 사용
+print("1차 score : ")
+print(lr.score(train_input, train_target))
+print(lr.score(test_input, test_target))
+
 
 train_poly = np.column_stack((train_input ** 2 , train_input))
 test_poly = np.column_stack((test_input ** 2, test_input))
@@ -91,5 +96,6 @@ plt.xlabel('length')
 plt.ylabel('weight')
 plt.show()
 
+print("2차 score : ")
 print(lr.score(train_poly, train_target))
 print(lr.score(test_poly, test_target))
