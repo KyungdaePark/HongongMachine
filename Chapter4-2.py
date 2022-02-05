@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 train_input, test_input, train_target, test_target = train_test_split(
     fish_input, fish_target, random_state = 42
 )
-
+train_target = train_target.ravel()
 from sklearn.preprocessing import StandardScaler
 ss = StandardScaler()
 ss.fit(train_input)
@@ -51,7 +51,6 @@ plt.title('TRAIN / TEST SCORE')
 plt.show()
 
 # epoch = 100 이 좋겠군.
-
 sc2 = SGDClassifier(loss = 'log', max_iter = 100, tol = None, random_state = 42) # tol이 None이어야 max_iter만큼 반복함.
 sc2.fit(train_scaled, train_target)
 print("\nFISH_INPUT -> SCALED -> SGD(log, max_iter = 100)")
@@ -63,3 +62,6 @@ sc3.fit(train_scaled, train_target)
 print("\nFISH_INPUT -> SCALED -> SGD(hinge), max_iter = 100)")
 print("TRAIN SCORE : " + str(sc3.score(train_scaled, train_target)))
 print("TEST SCORE : " + str(sc3.score(test_scaled, test_target)))
+
+
+
