@@ -51,8 +51,8 @@ print("\nDT (pruned) SCORE : ")
 print("TRAIN SCORE : " + str(dt2.score(train_scaled, train_target)))
 print("TEST SCORE : " + str(dt2.score(test_scaled, test_target)))
 
-plt.figure(figsize=(20,15))
-plt.title("DecisionTree (pruned)")
+plt.figure(figsize=(10,7))
+plt.title("DecisionTree (pruned)")  
 plot_tree(dt2, feature_names = ['alcohol', 'sugar', 'pH'], filled = True,)
 plt.show()
 
