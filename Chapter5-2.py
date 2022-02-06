@@ -28,8 +28,8 @@ from sklearn.tree import DecisionTreeClassifier
 dt = DecisionTreeClassifier(random_state = 42)
 dt.fit(sub_input, sub_target)
 print("\nDecisionTree")
-print("SUB SCORE : " +str(dt.score(sub_input, sub_target)))
-print("VAL SCORE : " +str(dt.score(val_input, val_target)))
+print("SUB SCORE : " +str(dt.score(sub_input, sub_target))) # sub : 훈련 세트
+print("VAL SCORE : " +str(dt.score(val_input, val_target))) # val : 검증 세트
 
 # cv, k-fold cv
 from sklearn.model_selection import cross_validate
