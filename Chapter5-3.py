@@ -40,9 +40,9 @@ print(rf2.oob_score_)
 # Extra Tree
 from sklearn.ensemble import ExtraTreesClassifier
 et = ExtraTreesClassifier(n_jobs = -1, random_state = 42)
-scores = cross_validate(et, train_input, train_target, return_train_score = True, n_jobs = -1)
+et_scores = cross_validate(et, train_input, train_target, return_train_score = True, n_jobs = -1)
 print("\nExtraTree Train/Test Score : ")
-print(np.mean(scores['train_score']), np.mean(scores['test_score']))
+print(np.mean(et_scores['train_score']), np.mean(et_scores['test_score']))
 
 # ET 의 특성 중요도
 et.fit(train_input, train_target)
@@ -52,15 +52,15 @@ print(et.feature_importances_)
 # GradientBoosting
 from sklearn.ensemble import GradientBoostingClassifier
 gb = GradientBoostingClassifier(random_state = 42)
-scores = cross_validate(gb, train_input, train_target, return_train_score = True, n_jobs = -1)
+gb_scores = cross_validate(gb, train_input, train_target, return_train_score = True, n_jobs = -1)
 print("\nGradient Boosting Train/Test Score : ")
-print(np.mean(scores['train_score']), np.mean(scores['test_score']))
+print(np.mean(gb_scores['train_score']), np.mean(gb_scores['test_score']))
 
 # GB의 학습률을 증가시키고 트리의 개수를 늘려보자. 과대적합이 잘 일어나지 않음
 gb2 = GradientBoostingClassifier(n_estimators = 500, learning_rate = 0.2, random_state = 42,) # 기본값 100, 0.1
-scores = cross_validate(gb2, train_input, train_target, return_train_score = True, n_jobs = -1)
+gb2_scores = cross_validate(gb2, train_input, train_target, return_train_score = True, n_jobs = -1)
 print("\nGradient Boosting -> 학습률 & 트리의 개수 ↑ Train/Test Score : ")
-print(np.mean(scores['train_score']), np.mean(scores['test_score']))
+print(np.mean(gb2_scores['train_score']), np.mean(gb2_scores['test_score']))
 # 매개변수 중 subsamples의 값을 1보다 작게하면 미니배치/ 확률적 경사 하강법이 됨. 지금은 배치 경사 하강법임.
 
 # GB의 특성 중요도
@@ -86,11 +86,37 @@ result_hgb_train = permutation_importance(hgb, train_input, train_target, n_repe
 print("\nHistogram based Gradient Boosting Feature_Importances : ")
 print(result_hgb_train.importances_mean)
 
-result_hgb_test = permutation_importance(hgb, test_input, test_target, n_repeats = 10, random_state = 42, n_jobs = -1)
-print("\nHistogram based Gradient Boosting -> 랜덤하게 섞은 횟수 ↑ Train/Test Score : ")
-print(result_hgb_test.importances_mean)
 
 print("\nHGB TEST SCORE :")
 print(hgb.score(test_input, test_target))
+
+import matplotlib.pyplot as plt
+models = ['RF', 'ET', 'GB', 'H-GB']
+SCORE = [rf2.oob_score_, np.mean(et_scores['test_score']),np.mean(gb2_scores['test_score']),hgb.score(test_input, test_target)]
+plt.bar(models, SCORE, width = 0.4, color = ['r', 'g', 'b', 'black'])
+plt.title('TEST SCORE')
+plt.show()
+
+fi = [rf.feature_importances_[0], et.feature_importances_[0], gb2.feature_importances_[0], result_hgb_train.importances_mean[0]]
+fi2 = [rf.feature_importances_[1], et.feature_importances_[1], gb2.feature_importances_[1], result_hgb_train.importances_mean[1]]
+fi3 = [rf.feature_importances_[2], et.feature_importances_[2], gb2.feature_importances_[2], result_hgb_train.importances_mean[2]]
+width = 0.8
+
+def create_x(t, w, n, d):
+    return [t*x + w*n for x in range(d)]
+value_a_x = create_x(3, 0.8, 1, 4)
+value_b_x = create_x(3, 0.8, 2, 4)
+value_c_x = create_x(3, 0.8, 3, 4)
+
+ax = plt.subplot()
+ax.bar(value_a_x, fi, width = width, color = ['r', 'g', 'b', 'black'], edgecolor = "black")
+ax.bar(value_b_x, fi2, width=width, color = ['r', 'g', 'b', 'black'], edgecolor = "black")
+ax.bar(value_c_x, fi3, width=width, color = ['r','g','b', 'black'], edgecolor = "black")
+
+middle_x = [(a+b+c)/3 for (a,b,c) in zip(value_a_x, value_b_x, value_c_x)]
+ax.set_xticks(middle_x)
+ax.set_xticklabels(models)
+ax.set_title('FEATURE_IMPORTANCES')
+plt.show()
 
 
